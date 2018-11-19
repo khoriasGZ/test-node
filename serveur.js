@@ -1,31 +1,18 @@
 var http = require('http');
-var url = require('url');
-var querystring = require('querystring');
+var EventEmitter = require('events').EventEmitter;
 
 var server = http.createServer(function(req, res) {
-    var params = querystring.parse(url.parse(req.url).query);
-    res.writeHead(200, {"Content-Type": "text/plain"});
-    if ('prenom' in params && 'nom' in params) {
-        res.write('Vous vous appelez ' + params['prenom'] + ' ' + params['nom']);
-    }
-    else {
-        res.write('Vous devez bien avoir un prénom et un nom, non ?');
-    }
-    res.end();
+  res.writeHead(200);
+  res.end('Salut tout le monde !');
 });
-server.listen(8080);
 
-/**
-   HTML sur le serveur node.js
-  
- res.write('<!DOCTYPE html>'+
- '<html>'+
- '    <head>'+
- '        <meta charset="utf-8" />'+
- '        <title>Ma page Node.js !</title>'+
- '   </head>'+
- '   <body>'+
- '       <p>Voici un paragraphe <strong>HTML</strong> !</p>'+
- '   </body>'+
- '</html>');
-*/
+var jeu = new EventEmitter();
+
+jeu.on('gameover', function(message){
+    console.log(message);
+})
+
+jeu.emit('gameover', 'Vous avez perdu !');
+
+server.listen(8080); // Démarre le serveur
+
